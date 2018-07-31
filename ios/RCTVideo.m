@@ -675,15 +675,14 @@ static NSString *const timedMetadata = @"timedMetadata";
     CMTime current = item.currentTime;
     // TODO figure out a good tolerance level
     CMTime tolerance = CMTimeMake([seekTolerance floatValue], timeScale);
-    BOOL wasPaused = _paused;
     
     if (CMTimeCompare(current, cmSeekTime) != 0) {
-      if (!wasPaused) [_player pause];
+      if (!_paused) [_player pause];
       [_player seekToTime:cmSeekTime toleranceBefore:tolerance toleranceAfter:tolerance completionHandler:^(BOOL finished) {
         if (!_timeObserver) {
           [self addPlayerTimeObserver];
         }
-        if (!wasPaused) {
+        if (!_paused) {
           [self setPaused:false];
         }
         if(self.onVideoSeek) {
